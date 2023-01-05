@@ -1,0 +1,52 @@
+package main
+
+import "fmt"
+
+const NMAX = 1055
+
+type nation struct {
+	negara, polling int
+}
+type tabNation [NMAX]nation
+
+func posisi(t tabNation, n int, negara int) int {
+	for i := 0; i < n; i++ {
+		if t[i].negara == negara {
+			return i
+		}
+	}
+	return -1
+}
+func main() {
+	var p tabNation
+	var n, idx, x int
+	n = 0
+	fmt.Scan(&x)
+	for x != -1 {
+		idx = posisi(p, n, x)
+		if idx == -1 {
+			p[n].negara = x
+			p[n].polling = 1
+			n++
+		} else {
+			p[idx].polling++
+		}
+		fmt.Scan(&x)
+	}
+	var i, j int
+	var temp nation
+
+	for i = 1; i <= n-1; i++ {
+		j = i
+		temp = p[j]
+		for j > 0 && temp.polling > p[j-1].polling {
+			p[j] = p[j-1]
+			j++
+		}
+		p[j] = temp
+	}
+
+	for z := 0; z < n; z++ {
+		fmt.Printf("%v(%v)", p[z].negara, p[z].polling)
+	}
+}
